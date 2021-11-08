@@ -1,7 +1,7 @@
 // nest cli created
 // nest generate controller messages/messages --flat
 import { Controller, Get, Post, Param, Body } from '@nestjs/common';
-
+import { CreateMessageDto } from './dtos/create-message.dto';
 // pass the rout message in the controller
 @Controller('messages')
 export class MessagesController {
@@ -16,9 +16,8 @@ export class MessagesController {
   }
 
   // POSTS
-
   @Post('/')
-  createMessage(@Body() body: any) {
+  createMessage(@Body() body: CreateMessageDto) {
     console.log(body);
   }
 }
