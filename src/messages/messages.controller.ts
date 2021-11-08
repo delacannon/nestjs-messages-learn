@@ -1,18 +1,20 @@
 // nest cli created
 // nest generate controller messages/messages --flat
-import { Controller, Get, Post, Param, Body } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Param,
+  Body,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreateMessageDto } from './dtos/create-message.dto';
 import { MessagesService } from './messages.service';
 
 // pass the rout message in the controller
 @Controller('messages')
 export class MessagesController {
-  messageService: MessagesService;
-
-  constructor() {
-    // NOT USE THIS
-    this.messageService = new MessagesService();
-  }
+  constructor(public messageService: MessagesService) {}
 
   // GET
   @Get('/')
@@ -21,8 +23,12 @@ export class MessagesController {
   }
 
   @Get('/:id')
-  getMessage(@Param('id') id: any) {
-    return this.messageService.findOne(id);
+  async getMessage(@Param('id') id: any) {
+    const message = await this.messageService.findOne(id);
+    if (!message) {
+      throw new NotFoundException('message not found');
+    }
+    return message;
   }
 
   // POSTS
